@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../core/core.dart';
@@ -37,8 +38,7 @@ class OnboardingScreen extends HookConsumerWidget {
                 48.verticalSpace,
                 CustomButton(
                   onPressed: () {
-                    // TODO: Navigate to Login screen
-                    debugPrint('Navigate to Login');
+                    context.push(AppRoutes.login);
                   },
                   text: 'Login',
                   backgroundColor: AppColors.white50,
@@ -55,7 +55,7 @@ class OnboardingScreen extends HookConsumerWidget {
                   foregroundColor: AppColors.white50,
                 ),
                 30.verticalSpace,
-                VersionText(),
+                VersionText(textColor: AppColors.white),
               ],
             ),
           ),

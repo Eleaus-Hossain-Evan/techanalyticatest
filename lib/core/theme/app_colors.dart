@@ -16,6 +16,7 @@ class AppColors {
   static const Color primary50 = Color(0xFFFEE8E7);
 
   static const Color backgroundLight = Color(0xFFF8F9FA);
+  static const Color backgroundDim = Color(0xFFE6E6E9);
 
   static const Color textDark = Color(0xFF2C3E50);
   static const Color textGray = Color(0xFF7F8C8D);

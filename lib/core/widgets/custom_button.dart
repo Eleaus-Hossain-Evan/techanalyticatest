@@ -278,7 +278,6 @@ class CustomButton extends StatelessWidget {
 
   ButtonStyle? _buildButtonStyle(BuildContext context) {
     final colors = _getVariantColors(context);
-    final defaultBorderRadius = _getDefaultBorderRadius();
 
     switch (type) {
       case AppButtonType.filled:
@@ -289,7 +288,7 @@ class CustomButton extends StatelessWidget {
           elevation: elevation,
           shape: borderRadius != null
               ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius!))
-              : RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultBorderRadius)),
+              : null,
           textStyle: textStyle,
         );
 
@@ -302,7 +301,7 @@ class CustomButton extends StatelessWidget {
           side: borderSide ?? BorderSide(color: colors.foreground),
           shape: borderRadius != null
               ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius!))
-              : RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultBorderRadius)),
+              : null,
           textStyle: textStyle,
         );
 
@@ -314,7 +313,7 @@ class CustomButton extends StatelessWidget {
           elevation: elevation ?? 2,
           shape: borderRadius != null
               ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius!))
-              : RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultBorderRadius)),
+              : null,
           textStyle: textStyle,
         );
 
@@ -426,14 +425,6 @@ class CustomButton extends StatelessWidget {
         return type == AppButtonType.outlined || type == AppButtonType.text ? AppColors.error : AppColors.white;
       case AppButtonVariant.success:
         return type == AppButtonType.outlined || type == AppButtonType.text ? AppColors.primary : AppColors.white;
-    }
-  }
-
-  double _getDefaultBorderRadius() {
-    try {
-      return 12.r; // From theme
-    } catch (e) {
-      return 12.0;
     }
   }
 

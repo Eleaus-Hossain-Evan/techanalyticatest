@@ -47,8 +47,8 @@ class AppTheme {
     // fillColor: AppColors.white,
     isDense: true,
     contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-    labelStyle: TextStyle(color: AppColors.black.withOpacity(.38), fontSize: 14.sp, fontWeight: FontWeight.w500),
-    hintStyle: TextStyle(color: AppColors.black.withOpacity(.38), fontSize: 14.sp, fontWeight: FontWeight.w500),
+    labelStyle: TextStyle(color: AppColors.black.withOpacity(.38), fontSize: 14.sp, fontWeight: FontWeight.normal),
+    hintStyle: TextStyle(color: AppColors.black.withOpacity(.38), fontSize: 14.sp, fontWeight: FontWeight.normal),
     floatingLabelStyle: TextStyle(fontWeight: FontWeight.w700),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.r),
@@ -147,5 +147,5 @@ class AppTheme {
     }),
   );
 
-  static final kButtonBorderRadius = BorderRadius.circular(12);
+  static final kButtonBorderRadius = BorderRadius.circular(6);
 }
