@@ -22,35 +22,7 @@ import 'package:go_router/go_router.dart';
 ///   ),
 /// ),
 /// ```
-
-/// Abstract base class for custom transition pages
-abstract class CustomTransitionPageBase<T> extends CustomTransitionPage<T> {
-  const CustomTransitionPageBase({
-    required super.child,
-    super.key,
-    super.transitionDuration = const Duration(milliseconds: 500),
-    super.reverseTransitionDuration,
-  }) : super(transitionsBuilder: _buildTransition);
-
-  static Widget _buildTransition(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-    Widget child,
-  ) {
-    // This will be overridden by concrete implementations
-    return child;
-  }
-
-  /// Override this method to define custom transition animations
-  Widget buildTransition(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-    Widget child,
-  );
-}
-
+///
 /// Fade transition page
 class FadeTransitionPage<T> extends CustomTransitionPage<T> {
   const FadeTransitionPage({
@@ -164,15 +136,4 @@ class NoTransitionPage<T> extends CustomTransitionPage<T> {
   ) {
     return child;
   }
-}
-
-/// Custom animation page builder
-class CustomAnimationPage<T> extends CustomTransitionPage<T> {
-  const CustomAnimationPage({
-    required super.child,
-    required super.transitionsBuilder,
-    super.key,
-    super.transitionDuration = const Duration(milliseconds: 500),
-    super.reverseTransitionDuration,
-  });
 }

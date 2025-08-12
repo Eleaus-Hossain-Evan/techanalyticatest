@@ -39,7 +39,7 @@ class AppTheme {
 
   static BadgeThemeData get _badgeTheme => BadgeThemeData(
     backgroundColor: AppColors.primary.darken(20),
-    textStyle: TextStyle(color: AppColors.textWhite, fontSize: 10.sp, fontWeight: FontWeight.w600),
+    textStyle: TextStyle(color: AppColors.white, fontSize: 10.sp, fontWeight: FontWeight.w600),
   );
 
   static InputDecorationTheme get _inputDecorationTheme => InputDecorationTheme(
@@ -47,8 +47,8 @@ class AppTheme {
     // fillColor: AppColors.white,
     isDense: true,
     contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-    labelStyle: TextStyle(color: AppColors.textBlack.withOpacity(.38), fontSize: 14.sp, fontWeight: FontWeight.w500),
-    hintStyle: TextStyle(color: AppColors.textBlack.withOpacity(.38), fontSize: 14.sp, fontWeight: FontWeight.w500),
+    labelStyle: TextStyle(color: AppColors.black.withOpacity(.38), fontSize: 14.sp, fontWeight: FontWeight.w500),
+    hintStyle: TextStyle(color: AppColors.black.withOpacity(.38), fontSize: 14.sp, fontWeight: FontWeight.w500),
     floatingLabelStyle: TextStyle(fontWeight: FontWeight.w700),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.r),
@@ -72,11 +72,8 @@ class AppTheme {
     ),
   );
 
-  static AppBarTheme get _appBarThemeData => const AppBarTheme(
-    backgroundColor: AppColors.backgroundWhite,
-    elevation: 4,
-    surfaceTintColor: AppColors.backgroundWhite,
-  );
+  static AppBarTheme get _appBarThemeData =>
+      const AppBarTheme(backgroundColor: AppColors.white, elevation: 4, surfaceTintColor: AppColors.white);
 
   static FilledButtonThemeData get _filledButtonTheme => FilledButtonThemeData(
     style: FilledButton.styleFrom(
@@ -84,9 +81,9 @@ class AppTheme {
       maximumSize: Size.fromHeight(48.h),
       fixedSize: Size.fromHeight(48.h),
       minimumSize: Size.fromHeight(48.h),
-      foregroundColor: AppColors.textWhite,
+      foregroundColor: AppColors.white,
       shape: RoundedRectangleBorder(borderRadius: kButtonBorderRadius),
-      textStyle: TextStyle(fontWeight: FontWeight.normal),
+      textStyle: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, fontFamily: GoogleFonts.poppins().fontFamily),
     ),
   );
   static ButtonThemeData get _buttonThemeData => ButtonThemeData(
@@ -133,7 +130,7 @@ class AppTheme {
   );
 
   static BottomSheetThemeData get _bottomSheetThemeData => BottomSheetThemeData(
-    backgroundColor: AppColors.textWhite,
+    backgroundColor: AppColors.white,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
     showDragHandle: true,
   );

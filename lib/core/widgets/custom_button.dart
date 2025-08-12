@@ -389,7 +389,7 @@ class CustomButton extends StatelessWidget {
           background: AppColors.primary,
           foreground: type == AppButtonType.outlined || type == AppButtonType.text
               ? AppColors.primary
-              : AppColors.textWhite,
+              : AppColors.white,
         );
 
       case AppButtonVariant.secondary:
@@ -397,15 +397,13 @@ class CustomButton extends StatelessWidget {
           background: AppColors.textGray,
           foreground: type == AppButtonType.outlined || type == AppButtonType.text
               ? AppColors.textGray
-              : AppColors.textWhite,
+              : AppColors.white,
         );
 
       case AppButtonVariant.destructive:
         return (
           background: AppColors.error,
-          foreground: type == AppButtonType.outlined || type == AppButtonType.text
-              ? AppColors.error
-              : AppColors.textWhite,
+          foreground: type == AppButtonType.outlined || type == AppButtonType.text ? AppColors.error : AppColors.white,
         );
 
       case AppButtonVariant.success:
@@ -413,7 +411,7 @@ class CustomButton extends StatelessWidget {
           background: AppColors.primary,
           foreground: type == AppButtonType.outlined || type == AppButtonType.text
               ? AppColors.primary
-              : AppColors.textWhite,
+              : AppColors.white,
         );
     }
   }
@@ -421,13 +419,13 @@ class CustomButton extends StatelessWidget {
   Color _getLoadingColor() {
     switch (variant) {
       case AppButtonVariant.primary:
-        return type == AppButtonType.outlined || type == AppButtonType.text ? AppColors.primary : AppColors.textWhite;
+        return type == AppButtonType.outlined || type == AppButtonType.text ? AppColors.primary : AppColors.white;
       case AppButtonVariant.secondary:
-        return type == AppButtonType.outlined || type == AppButtonType.text ? AppColors.textGray : AppColors.textWhite;
+        return type == AppButtonType.outlined || type == AppButtonType.text ? AppColors.textGray : AppColors.white;
       case AppButtonVariant.destructive:
-        return type == AppButtonType.outlined || type == AppButtonType.text ? AppColors.error : AppColors.textWhite;
+        return type == AppButtonType.outlined || type == AppButtonType.text ? AppColors.error : AppColors.white;
       case AppButtonVariant.success:
-        return type == AppButtonType.outlined || type == AppButtonType.text ? AppColors.primary : AppColors.textWhite;
+        return type == AppButtonType.outlined || type == AppButtonType.text ? AppColors.primary : AppColors.white;
     }
   }
 

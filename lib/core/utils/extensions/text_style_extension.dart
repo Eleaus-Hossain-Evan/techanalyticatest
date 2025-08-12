@@ -40,8 +40,8 @@ extension TextStyleHelpers on TextStyle {
   TextStyle font(double value) => copyWith(fontSize: value);
   TextStyle colorSet(Color value) => copyWith(color: value);
   TextStyle colorPrimary() => copyWith(color: AppColors.primary);
-  TextStyle colorBlack() => copyWith(color: AppColors.textBlack);
-  TextStyle colorWhite() => copyWith(color: AppColors.textWhite);
+  TextStyle colorBlack() => copyWith(color: AppColors.black);
+  TextStyle colorWhite() => copyWith(color: AppColors.white);
   TextStyle colorGray() => copyWith(color: AppColors.textGray);
   TextStyle colorDark() => copyWith(color: AppColors.textDark);
 }

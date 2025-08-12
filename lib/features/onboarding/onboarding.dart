@@ -13,9 +13,9 @@ class OnboardingScreen extends HookConsumerWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          ColoredBox(color: AppColors.primary.withOpacity(.4)),
+          Image.asset(Images.onboardingBg, fit: BoxFit.fill),
           Padding(
-            padding: EdgeInsets.all(16.sp),
+            padding: EdgeInsets.symmetric(horizontal: 16.sp),
             child: Column(
               children: [
                 60.verticalSpace,
@@ -41,8 +41,8 @@ class OnboardingScreen extends HookConsumerWidget {
                     debugPrint('Navigate to Login');
                   },
                   text: 'Login',
-                  backgroundColor: AppColors.backgroundWhite,
-                  foregroundColor: AppColors.textBlack,
+                  backgroundColor: AppColors.white50,
+                  foregroundColor: AppColors.textDark,
                 ),
                 16.verticalSpace,
                 CustomButton(
@@ -52,7 +52,7 @@ class OnboardingScreen extends HookConsumerWidget {
                   },
                   text: 'Create Account',
                   backgroundColor: AppColors.success,
-                  foregroundColor: AppColors.textWhite,
+                  foregroundColor: AppColors.white50,
                 ),
                 30.verticalSpace,
                 VersionText(),
@@ -61,18 +61,6 @@ class OnboardingScreen extends HookConsumerWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class VersionText extends ConsumerWidget {
-  const VersionText({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox(
-      height: 44.h,
-      child: AppText.white('Beta Version 1.0', fontSize: 10.sp, fontWeight: FontWeight.normal),
     );
   }
 }

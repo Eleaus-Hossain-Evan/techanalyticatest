@@ -103,7 +103,7 @@ class AppText extends StatelessWidget {
          style: style ?? style,
          fontSize: fontSize ?? fontSize,
          fontWeight: fontWeight ?? fontWeight,
-         color: AppColors.textWhite,
+         color: AppColors.white,
          height: height ?? height,
          maxLines: maxLines ?? maxLines,
          textAlign: textAlign ?? textAlign,

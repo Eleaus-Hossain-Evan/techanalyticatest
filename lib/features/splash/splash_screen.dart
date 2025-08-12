@@ -38,7 +38,7 @@ class SplashScreen extends HookConsumerWidget {
     }, []);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundBlack,
+      backgroundColor: AppColors.black,
       body: Center(
         child: AnimatedBuilder(
           animation: animationController,
