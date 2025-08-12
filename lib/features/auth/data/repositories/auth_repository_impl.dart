@@ -5,10 +5,6 @@ import '../datasources/auth_mock_datasource.dart';
 import '../models/login_request_model.dart';
 import '../models/user_model.dart';
 
-/// Implementation of AuthRepository using mock data source
-///
-/// This implementation uses mock data for authentication
-/// and local storage for session persistence.
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({required this.mockDataSource, required this.localDataSource});
 
@@ -18,7 +14,6 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> login(LoginRequest request) async {
     try {
-      // Authenticate with mock data source
       final authResponse = await mockDataSource.login(request);
 
       if (!authResponse['success']) {

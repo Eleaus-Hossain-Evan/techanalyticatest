@@ -25,7 +25,7 @@ class HomeScreen extends HookConsumerWidget {
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () => _showLogoutDialog(context, ref),
+            onPressed: () => _showLogoutDialog(context),
             icon: const Icon(Icons.logout),
             tooltip: 'Logout',
           ),
@@ -47,7 +47,11 @@ class HomeScreen extends HookConsumerWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 2)),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
                   ],
                 ),
                 child: Column(
@@ -56,8 +60,15 @@ class HomeScreen extends HookConsumerWidget {
                     Container(
                       width: 80.w,
                       height: 80.w,
-                      decoration: BoxDecoration(color: AppColors.success.withOpacity(0.1), shape: BoxShape.circle),
-                      child: Icon(Icons.check_circle, size: 40.w, color: AppColors.success),
+                      decoration: BoxDecoration(
+                        color: AppColors.success.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.check_circle,
+                        size: 40.w,
+                        color: AppColors.success,
+                      ),
                     ),
 
                     SizedBox(height: 24.h),
@@ -65,7 +76,11 @@ class HomeScreen extends HookConsumerWidget {
                     // Welcome Message
                     Text(
                       'Welcome Back!',
-                      style: const TextStyle(fontSize: 24, color: AppColors.textDark, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        color: AppColors.textDark,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
 
                     SizedBox(height: 8.h),
@@ -74,16 +89,32 @@ class HomeScreen extends HookConsumerWidget {
                     if (currentUser != null) ...[
                       Text(
                         currentUser.name,
-                        style: const TextStyle(fontSize: 20, color: AppColors.primary, fontWeight: FontWeight.w600),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
 
                       SizedBox(height: 4.h),
 
-                      Text(currentUser.email, style: const TextStyle(fontSize: 16, color: AppColors.textGray)),
+                      Text(
+                        currentUser.email,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: AppColors.textGray,
+                        ),
+                      ),
 
                       if (currentUser.phone != null) ...[
                         SizedBox(height: 4.h),
-                        Text(currentUser.phone!, style: const TextStyle(fontSize: 14, color: AppColors.textGray)),
+                        Text(
+                          currentUser.phone!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppColors.textGray,
+                          ),
+                        ),
                       ],
                     ],
                   ],
@@ -99,16 +130,26 @@ class HomeScreen extends HookConsumerWidget {
                 decoration: BoxDecoration(
                   color: AppColors.success.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: AppColors.success.withOpacity(0.3), width: 1),
+                  border: Border.all(
+                    color: AppColors.success.withOpacity(0.3),
+                    width: 1,
+                  ),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline, color: AppColors.success, size: 20.w),
+                    Icon(
+                      Icons.info_outline,
+                      color: AppColors.success,
+                      size: 20.w,
+                    ),
                     SizedBox(width: 12.w),
                     Expanded(
                       child: Text(
                         'Login successful! This is your home screen.',
-                        style: const TextStyle(fontSize: 16, color: AppColors.success),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: AppColors.success,
+                        ),
                       ),
                     ),
                   ],
@@ -123,7 +164,8 @@ class HomeScreen extends HookConsumerWidget {
                   Expanded(
                     child: CustomButton(
                       text: 'Profile',
-                      onPressed: () => _showComingSoonDialog(context, 'Profile'),
+                      onPressed: () =>
+                          _showComingSoonDialog(context, 'Profile'),
                       type: AppButtonType.outlined,
                     ),
                   ),
@@ -131,7 +173,8 @@ class HomeScreen extends HookConsumerWidget {
                   Expanded(
                     child: CustomButton(
                       text: 'Settings',
-                      onPressed: () => _showComingSoonDialog(context, 'Settings'),
+                      onPressed: () =>
+                          _showComingSoonDialog(context, 'Settings'),
                       type: AppButtonType.outlined,
                     ),
                   ),
@@ -141,11 +184,17 @@ class HomeScreen extends HookConsumerWidget {
               const Spacer(),
 
               // App Info
-              Text('TechAnalytica Test App', style: const TextStyle(fontSize: 14, color: AppColors.textGray)),
+              Text(
+                'TechAnalytica Test App',
+                style: const TextStyle(fontSize: 14, color: AppColors.textGray),
+              ),
 
               SizedBox(height: 4.h),
 
-              Text('Authentication Demo', style: const TextStyle(fontSize: 12, color: AppColors.textGray)),
+              Text(
+                'Authentication Demo',
+                style: const TextStyle(fontSize: 12, color: AppColors.textGray),
+              ),
             ],
           ),
         ),
@@ -154,33 +203,42 @@ class HomeScreen extends HookConsumerWidget {
   }
 
   /// Show logout confirmation dialog
-  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
+  void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(context).pop(); // Close dialog first
+      builder: (context) => Consumer(
+        builder: (context, ref, child) {
+          return AlertDialog(
+            title: const Text('Logout'),
+            content: const Text('Are you sure you want to logout?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.of(context).pop(); // Close dialog first
 
-              try {
-                // Read the notifier fresh to avoid disposed ref issues
-                final authNotifier = ref.read(authNotifierProvider.notifier);
-                await authNotifier.logout();
-                ref.invalidate(isAuthenticatedProvider);
+                  try {
+                    // Read the notifier fresh to avoid disposed ref issues
+                    final authNotifier = ref.read(
+                      authNotifierProvider.notifier,
+                    );
+                    await authNotifier.logout();
+                    ref.invalidate(isAuthenticatedProvider);
 
-                // Navigation will be handled by router redirect
-              } catch (e) {
-                // Handle logout error if needed
-                debugPrint('Logout error: $e');
-              }
-            },
-            child: const Text('Logout'),
-          ),
-        ],
+                    // Navigation will be handled by router redirect
+                  } catch (e) {
+                    // Handle logout error if needed
+                    debugPrint('Logout error: $e');
+                  }
+                },
+                child: const Text('Logout'),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -192,7 +250,12 @@ class HomeScreen extends HookConsumerWidget {
       builder: (context) => AlertDialog(
         title: Text(feature),
         content: Text('$feature functionality is coming soon!'),
-        actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
       ),
     );
   }

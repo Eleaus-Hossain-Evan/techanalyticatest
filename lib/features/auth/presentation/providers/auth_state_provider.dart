@@ -61,12 +61,14 @@ class AuthNotifier extends _$AuthNotifier {
 }
 
 @riverpod
+/// Check if user is authenticated
 Future<bool> isAuthenticated(Ref ref) async {
   final authState = ref.read(authRepositoryProvider);
   return await authState.isAuthenticated();
 }
 
 @riverpod
+/// Get current user information
 FutureOr<User?> currentUser(Ref ref) async {
   final authState = ref.read(authRepositoryProvider);
   return await authState.getUser();
