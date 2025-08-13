@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../core/core.dart';
 import '../../domain/entities/lat_lng_model.dart';
 import '../../domain/entities/route_model.dart';
 import '../providers/map_notifier.dart';
@@ -199,7 +200,7 @@ class ReusableMapWidget extends HookConsumerWidget {
               points: route.polylinePoints
                   .map((point) => LatLng(point.latitude, point.longitude))
                   .toList(),
-              color: Colors.blue,
+              color: AppColors.primary,
               width: 4,
               patterns: [],
             ),
