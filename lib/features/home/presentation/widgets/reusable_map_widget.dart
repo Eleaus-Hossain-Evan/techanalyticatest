@@ -82,8 +82,9 @@ class ReusableMapWidget extends HookConsumerWidget {
           next.value!.pickupLocation,
           next.value!.destinationLocation,
         ]);
+        final padding = _calculatePadding(height, width);
         mapController.value?.animateCamera(
-          CameraUpdate.newLatLngBounds(bounds, 10),
+          CameraUpdate.newLatLngBounds(bounds, padding),
         );
       }
     });
@@ -388,5 +389,17 @@ class ReusableMapWidget extends HookConsumerWidget {
       southwest: LatLng(minLat, minLng),
       northeast: LatLng(maxLat, maxLng),
     );
+  }
+
+  double _calculatePadding(double height, double width) {
+    // Calculate dynamic padding based on map size
+    // Padding must be less than half the smaller dimension
+    final smallerDimension = height < width ? height : width;
+    final maxPadding = (smallerDimension / 2) - 10; // -10 for safety margin
+
+    // Use a reasonable padding that scales with size, but cap it
+    final calculatedPadding = (smallerDimension * 0.1).clamp(20.0, maxPadding);
+
+    return calculatedPadding;
   }
 }
