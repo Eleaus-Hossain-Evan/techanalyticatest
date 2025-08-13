@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/providers/auth_state_provider.dart';
 import '../../features/home/presentation/pages/home_screen.dart';
+import '../../features/home/presentation/pages/trip_detail_screen.dart';
 import '../../features/onboarding/onboarding.dart';
 import '../../features/splash/splash_screen.dart';
 import 'app_routes.dart';
@@ -74,6 +75,18 @@ GoRouter router(Ref ref) {
           child: const HomeScreen(),
           transitionDuration: const Duration(milliseconds: 600),
         ),
+      ),
+      GoRoute(
+        name: AppRoutes.tripDetail,
+        path: '${AppRoutes.tripDetail}/:tripId',
+        pageBuilder: (context, state) {
+          final tripId = state.pathParameters['tripId']!;
+          return SlideFromRightTransitionPage<void>(
+            key: state.pageKey,
+            child: TripDetailScreen(tripId: tripId),
+            transitionDuration: const Duration(milliseconds: 400),
+          );
+        },
       ),
     ],
   );

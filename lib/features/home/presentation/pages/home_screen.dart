@@ -1,244 +1,166 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/core.dart';
 import '../../../auth/presentation/providers/auth_state_provider.dart';
+import '../providers/trip_providers.dart';
+import '../widgets/trip_search_bar.dart';
+import '../widgets/trip_status_tab_bar.dart';
+import '../widgets/trips_list.dart';
 
-/// Home screen displayed after successful authentication
+/// Main Dashboard (CCC - Booking Management) screen
 ///
-/// This is a placeholder home screen that demonstrates successful login.
-/// In a real app, this would contain the main app functionality.
+/// Displays trip booking management with three activity states:
+/// - Upcoming trips
+/// - Past (completed) trips
+/// - Cancelled trips
+///
+/// Features:
+/// - Tab navigation between trip statuses
+/// - Search booking functionality
+/// - Trip cards with map thumbnails
+/// - Trip details navigation
+/// - Call driver functionality
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserProvider).value;
+    final selectedTab = ref.watch(selectedTripTabProvider);
+    final searchQuery = ref.watch(searchQueryProvider);
+    final searchController = useTextEditingController();
+
+    // Trip tabs configuration
+    final tripTabs = ['Upcoming', 'Past', 'Cancelled'];
+
+    // Map tab index to trip status
+    final statusMapping = [
+      TripStatus.upcoming,
+      TripStatus.completed,
+      TripStatus.cancelled,
+    ];
+
+    // Get trips based on search query or status
+    final tripsAsync = searchQuery.isEmpty
+        ? ref.watch(tripsByStatusProvider)
+        : ref.watch(searchTripsProvider);
 
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
-      appBar: AppBar(
-        title: const Text('Home'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () => _showLogoutDialog(context),
-            icon: const Icon(Icons.logout),
-            tooltip: 'Logout',
+      appBar: HomeAppBar(),
+      body: Column(
+        children: [
+          // Trip status tabs
+          if (searchQuery.isEmpty) ...[
+            Padding(
+              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0),
+              child: TripStatusTabBar(
+                tabs: tripTabs,
+                selectedIndex: statusMapping.indexOf(selectedTab),
+                onTabSelected: (index) {
+                  final status = statusMapping[index];
+                  ref.read(selectedTripTabProvider.notifier).selectTab(status);
+                },
+              ),
+            ),
+          ],
+          16.verticalSpace,
+          // Search bar
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: TripSearchBar(
+              controller: searchController,
+              onChanged: (query) {
+                ref.read(searchQueryProvider.notifier).updateQuery(query);
+              },
+              onClear: () {
+                searchController.clear();
+                ref.read(searchQueryProvider.notifier).clearQuery();
+              },
+            ),
           ),
+          20.verticalSpace,
+          // Trips list
+          Expanded(child: TripsList()),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 40.h),
+      bottomNavigationBar: HomeNavigation(),
+    );
+  }
 
-              // Welcome Section
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(24.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.r),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    // Success Icon
-                    Container(
-                      width: 80.w,
-                      height: 80.w,
-                      decoration: BoxDecoration(
-                        color: AppColors.success.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.check_circle,
-                        size: 40.w,
-                        color: AppColors.success,
-                      ),
-                    ),
-
-                    SizedBox(height: 24.h),
-
-                    // Welcome Message
-                    Text(
-                      'Welcome Back!',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: AppColors.textDark,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    SizedBox(height: 8.h),
-
-                    // User Info
-                    if (currentUser != null) ...[
-                      Text(
-                        currentUser.name,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-
-                      SizedBox(height: 4.h),
-
-                      Text(
-                        currentUser.email,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: AppColors.textGray,
-                        ),
-                      ),
-
-                      if (currentUser.phone != null) ...[
-                        SizedBox(height: 4.h),
-                        Text(
-                          currentUser.phone!,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: AppColors.textGray,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 40.h),
-
-              // Login Success Message
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(16.w),
-                decoration: BoxDecoration(
-                  color: AppColors.success.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(
-                    color: AppColors.success.withOpacity(0.3),
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      color: AppColors.success,
-                      size: 20.w,
-                    ),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: Text(
-                        'Login successful! This is your home screen.',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: AppColors.success,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 32.h),
-
-              // Action Buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomButton(
-                      text: 'Profile',
-                      onPressed: () =>
-                          _showComingSoonDialog(context, 'Profile'),
-                      type: AppButtonType.outlined,
-                    ),
-                  ),
-                  SizedBox(width: 16.w),
-                  Expanded(
-                    child: CustomButton(
-                      text: 'Settings',
-                      onPressed: () =>
-                          _showComingSoonDialog(context, 'Settings'),
-                      type: AppButtonType.outlined,
-                    ),
-                  ),
-                ],
-              ),
-
-              const Spacer(),
-
-              // App Info
-              Text(
-                'TechAnalytica Test App',
-                style: const TextStyle(fontSize: 14, color: AppColors.textGray),
-              ),
-
-              SizedBox(height: 4.h),
-
-              Text(
-                'Authentication Demo',
-                style: const TextStyle(fontSize: 12, color: AppColors.textGray),
-              ),
-            ],
-          ),
+  /// Show user menu with profile and logout options
+  void _showUserMenu(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (context) => Container(
+        padding: EdgeInsets.all(20.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.person, color: AppColors.primary),
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.pop(context);
+                _showComingSoonDialog(context, 'Profile');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings, color: AppColors.primary),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.pop(context);
+                _showComingSoonDialog(context, 'Settings');
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout, color: AppColors.error),
+              title: const Text('Logout'),
+              onTap: () {
+                Navigator.pop(context);
+                _showLogoutDialog(context, ref);
+              },
+            ),
+          ],
         ),
       ),
     );
   }
 
   /// Show logout confirmation dialog
-  void _showLogoutDialog(BuildContext context) {
+  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
-      builder: (context) => Consumer(
-        builder: (context, ref, child) {
-          return AlertDialog(
-            title: const Text('Logout'),
-            content: const Text('Are you sure you want to logout?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  Navigator.of(context).pop(); // Close dialog first
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
 
-                  try {
-                    // Read the notifier fresh to avoid disposed ref issues
-                    final authNotifier = ref.read(
-                      authNotifierProvider.notifier,
-                    );
-                    await authNotifier.logout();
-                    ref.invalidate(isAuthenticatedProvider);
-
-                    // Navigation will be handled by router redirect
-                  } catch (e) {
-                    // Handle logout error if needed
-                    debugPrint('Logout error: $e');
-                  }
-                },
-                child: const Text('Logout'),
-              ),
-            ],
-          );
-        },
+              try {
+                final authNotifier = ref.read(authNotifierProvider.notifier);
+                await authNotifier.logout();
+                ref.invalidate(isAuthenticatedProvider);
+              } catch (e) {
+                debugPrint('Logout error: $e');
+              }
+            },
+            child: const Text('Logout'),
+          ),
+        ],
       ),
     );
   }
@@ -257,6 +179,97 @@ class HomeScreen extends HookConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const HomeAppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsetsGeometry.symmetric(horizontal: 16.w, vertical: 16.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                AppText('Logo', fontSize: 16.sp, fontWeight: FontWeight.w600),
+                Spacer(),
+                IconButton(
+                  onPressed: () {},
+                  padding: EdgeInsets.zero,
+                  visualDensity: VisualDensity.compact,
+                  icon: Badge(
+                    backgroundColor: AppColors.error,
+                    child: Icon(Icons.notifications_none_rounded, size: 20.sp),
+                  ),
+                ),
+              ],
+            ),
+            // 8.verticalSpace,
+            Row(
+              children: [
+                Icon(Icons.pin_drop_rounded, size: 12),
+                6.horizontalSpace,
+                AppText(
+                  'Gulshan1,Dhaka,Bangladesh',
+                  fontSize: 10.sp,
+                  color: AppColors.textGray,
+                ),
+                Spacer(),
+                Icon(Icons.arrow_forward_ios_rounded, size: 10),
+                12.horizontalSpace,
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(64 + 16.h + 13);
+}
+
+class HomeNavigation extends StatelessWidget {
+  const HomeNavigation({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      currentIndex: 2,
+      backgroundColor: AppColors.primary,
+      type: BottomNavigationBarType.fixed,
+      selectedLabelStyle: TextStyle(
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
+      ),
+      selectedItemColor: AppColors.white,
+      unselectedItemColor: Color(0xff8C8F9A),
+      items: [
+        BottomNavigationBarItem(
+          icon: Image.asset(Images.iconHome, height: 24, width: 24),
+          label: 'AAA',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(Images.iconBbb, height: 24, width: 24),
+          label: 'BBB',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(Images.iconCcc, height: 24, width: 24),
+          label: 'CCC',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(Images.iconDdd, height: 24, width: 24),
+          label: 'DDD',
+        ),
+      ],
     );
   }
 }

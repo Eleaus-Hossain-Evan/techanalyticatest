@@ -30,7 +30,7 @@ final class AuthNotifierProvider
   AuthNotifier create() => AuthNotifier();
 }
 
-String _$authNotifierHash() => r'2ae95ea69a58c7d570f4edb6cc8f7ab64041d759';
+String _$authNotifierHash() => r'a077b06f18d7a5bb88f46d13e9c2bc02bf268717';
 
 abstract class _$AuthNotifier extends $AsyncNotifier<bool> {
   FutureOr<bool> build();
@@ -51,12 +51,15 @@ abstract class _$AuthNotifier extends $AsyncNotifier<bool> {
   }
 }
 
+/// Check if user is authenticated
 @ProviderFor(isAuthenticated)
 const isAuthenticatedProvider = IsAuthenticatedProvider._();
 
+/// Check if user is authenticated
 final class IsAuthenticatedProvider
     extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
     with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Check if user is authenticated
   const IsAuthenticatedProvider._()
     : super(
         from: null,
@@ -84,12 +87,15 @@ final class IsAuthenticatedProvider
 
 String _$isAuthenticatedHash() => r'27e47c9fdb698cde7635d324e6494992677fe0f7';
 
+/// Get current user information
 @ProviderFor(currentUser)
 const currentUserProvider = CurrentUserProvider._();
 
+/// Get current user information
 final class CurrentUserProvider
     extends $FunctionalProvider<AsyncValue<User?>, User?, FutureOr<User?>>
     with $FutureModifier<User?>, $FutureProvider<User?> {
+  /// Get current user information
   const CurrentUserProvider._()
     : super(
         from: null,
