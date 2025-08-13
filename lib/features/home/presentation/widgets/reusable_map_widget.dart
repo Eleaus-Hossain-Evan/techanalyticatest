@@ -39,15 +39,14 @@ class ReusableMapWidget extends HookConsumerWidget {
     final mapController = useState<GoogleMapController?>(null);
     final asyncValue = ref.watch(mapAsyncNotifierProvider(mapIdentifier));
     final notifier = ref.read(mapAsyncNotifierProvider(mapIdentifier).notifier);
-    final defaultBorderRadius = borderRadius ?? BorderRadius.circular(12);
 
     // Load route when widget is built or locations change
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        notifier.loadRoute(
-          pickup: pickupLocation,
-          destination: destinationLocation,
-        );
+        // notifier.loadRoute(
+        //   pickup: pickupLocation,
+        //   destination: destinationLocation,
+        // );
       });
       return null;
     }, [pickupLocation, destinationLocation]);
@@ -70,50 +69,52 @@ class ReusableMapWidget extends HookConsumerWidget {
       return null;
     }, [asyncValue]);
 
-    return Container(
-      height: height,
-      width: width,
-      margin: margin,
-      decoration: BoxDecoration(
-        borderRadius: defaultBorderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: defaultBorderRadius,
-        child: Stack(
-          children: [
-            GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: LatLng(
-                  pickupLocation.latitude,
-                  pickupLocation.longitude,
-                ),
-                zoom: 12,
-              ),
-              onMapCreated: (GoogleMapController controller) {
-                mapController.value = controller;
-                asyncValue.whenData((route) {
-                  if (route != null) {
-                    _fitMapToRoute(controller, route);
-                  }
-                });
-              },
-              markers: _buildMarkers(asyncValue),
-              polylines: _buildPolylines(asyncValue),
-              myLocationEnabled: false,
-              myLocationButtonEnabled: false,
-              zoomControlsEnabled: false,
-              mapToolbarEnabled: false,
+    return AbsorbPointer(
+      child: Container(
+        height: height,
+        width: width,
+        margin: margin,
+        decoration: BoxDecoration(
+          borderRadius: borderRadius ?? BorderRadius.circular(0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-            _buildLoadingOverlay(notifier, asyncValue),
-            _buildRouteInfo(asyncValue),
           ],
+        ),
+        child: ClipRRect(
+          borderRadius: borderRadius ?? BorderRadius.circular(0),
+          child: Stack(
+            children: [
+              GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                    pickupLocation.latitude,
+                    pickupLocation.longitude,
+                  ),
+                  zoom: 12,
+                ),
+                onMapCreated: (GoogleMapController controller) {
+                  mapController.value = controller;
+                  asyncValue.whenData((route) {
+                    if (route != null) {
+                      _fitMapToRoute(controller, route);
+                    }
+                  });
+                },
+                markers: _buildMarkers(asyncValue),
+                polylines: _buildPolylines(asyncValue),
+                myLocationEnabled: false,
+                myLocationButtonEnabled: false,
+                zoomControlsEnabled: false,
+                mapToolbarEnabled: false,
+              ),
+              _buildLoadingOverlay(notifier, asyncValue),
+              _buildRouteInfo(asyncValue),
+            ],
+          ),
         ),
       ),
     );

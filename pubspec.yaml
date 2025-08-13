@@ -54,7 +54,6 @@ dependencies:
   icons_plus: ^5.0.0
   skeletonizer: ^2.1.0
   equatable: ^2.0.7
-  fluttertoast: ^8.2.12
   google_fonts: ^6.3.0
   country_code_picker: ^3.0.0
   dio: ^5.3.2

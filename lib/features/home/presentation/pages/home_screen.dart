@@ -43,11 +43,6 @@ class HomeScreen extends HookConsumerWidget {
       TripStatus.cancelled,
     ];
 
-    // Get trips based on search query or status
-    final tripsAsync = searchQuery.isEmpty
-        ? ref.watch(tripsByStatusProvider)
-        : ref.watch(searchTripsProvider);
-
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
       appBar: HomeAppBar(),
@@ -90,104 +85,13 @@ class HomeScreen extends HookConsumerWidget {
       bottomNavigationBar: HomeNavigation(),
     );
   }
-
-  /// Show user menu with profile and logout options
-  void _showUserMenu(BuildContext context, WidgetRef ref) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-      ),
-      builder: (context) => Container(
-        padding: EdgeInsets.all(20.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.person, color: AppColors.primary),
-              title: const Text('Profile'),
-              onTap: () {
-                Navigator.pop(context);
-                _showComingSoonDialog(context, 'Profile');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings, color: AppColors.primary),
-              title: const Text('Settings'),
-              onTap: () {
-                Navigator.pop(context);
-                _showComingSoonDialog(context, 'Settings');
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.logout, color: AppColors.error),
-              title: const Text('Logout'),
-              onTap: () {
-                Navigator.pop(context);
-                _showLogoutDialog(context, ref);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// Show logout confirmation dialog
-  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(context).pop();
-
-              try {
-                final authNotifier = ref.read(authNotifierProvider.notifier);
-                await authNotifier.logout();
-                ref.invalidate(isAuthenticatedProvider);
-              } catch (e) {
-                debugPrint('Logout error: $e');
-              }
-            },
-            child: const Text('Logout'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Show coming soon dialog for placeholder features
-  void _showComingSoonDialog(BuildContext context, String feature) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(feature),
-        content: Text('$feature functionality is coming soon!'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class HomeAppBar extends HookConsumerWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Padding(
         padding: EdgeInsetsGeometry.symmetric(horizontal: 16.w, vertical: 16.h),
@@ -201,7 +105,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 AppText('Logo', fontSize: 16.sp, fontWeight: FontWeight.w600),
                 Spacer(),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _showLogoutDialog(context, ref);
+                  },
                   padding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
                   icon: Badge(
@@ -234,6 +140,37 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(64 + 16.h + 13);
+
+  /// Show logout confirmation dialog
+  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+
+              try {
+                final authNotifier = ref.read(authNotifierProvider.notifier);
+                await authNotifier.logout();
+                ref.invalidate(isAuthenticatedProvider);
+              } catch (e) {
+                debugPrint('Logout error: $e');
+              }
+            },
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class HomeNavigation extends StatelessWidget {

@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/core.dart';
+import '../../domain/entities/lat_lng_model.dart';
 import '../../domain/entities/trip.dart';
+import 'reusable_map_widget.dart';
 
 /// Trip card widget to display trip information
 class TripCard extends StatelessWidget {
@@ -27,23 +29,23 @@ class TripCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         child: Row(
           children: [
-            Image.asset(
-              Images.dummyMap,
-              width: 130,
-              height: isNotUpcoming ? 180.h : 130.h,
-            ),
-            // ReusableMapWidget(
-            //   pickupLocation: LatLngModel(
-            //     latitude: trip.pickupLatitude!,
-            //     longitude: trip.pickupLongitude!,
-            //   ),
-            //   destinationLocation: LatLngModel(
-            //     latitude: trip.destinationLatitude!,
-            //     longitude: trip.destinationLongitude!,
-            //   ),
+            // Image.asset(
+            //   Images.dummyMap,
+            //   width: 130,
             //   height: isNotUpcoming ? 180.h : 130.h,
-            //   width: 130.w,
             // ),
+            ReusableMapWidget(
+              pickupLocation: LatLngModel(
+                latitude: trip.pickupLatitude!,
+                longitude: trip.pickupLongitude!,
+              ),
+              destinationLocation: LatLngModel(
+                latitude: trip.destinationLatitude!,
+                longitude: trip.destinationLongitude!,
+              ),
+              height: isNotUpcoming ? 180.h : 130.h,
+              width: 130.w,
+            ),
             6.horizontalSpace,
             Expanded(
               child: Column(

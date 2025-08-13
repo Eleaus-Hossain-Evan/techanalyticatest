@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/core.dart';
+import '../../../domain/entities/lat_lng_model.dart';
 import '../../../domain/entities/trip.dart';
+import '../reusable_map_widget.dart';
 
 class TripMapSectionWidget extends StatelessWidget {
   const TripMapSectionWidget({super.key, required this.trip});
@@ -22,20 +24,20 @@ class TripMapSectionWidget extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.r),
-        child: Image.asset(Images.dummyMap, fit: BoxFit.cover),
-        // child: ReusableMapWidget(
-        //   pickupLocation: LatLngModel(
-        //     latitude: trip.pickupLatitude!,
-        //     longitude: trip.pickupLongitude!,
-        //   ),
-        //   destinationLocation: LatLngModel(
-        //     latitude: trip.destinationLatitude!,
-        //     longitude: trip.destinationLongitude!,
-        //   ),
-        //   height: 200.h,
-        //   width: double.infinity,
-        //   borderRadius: BorderRadius.circular(12.r),
-        // ),
+        // child: Image.asset(Images.dummyMap, fit: BoxFit.cover),
+        child: ReusableMapWidget(
+          pickupLocation: LatLngModel(
+            latitude: trip.pickupLatitude!,
+            longitude: trip.pickupLongitude!,
+          ),
+          destinationLocation: LatLngModel(
+            latitude: trip.destinationLatitude!,
+            longitude: trip.destinationLongitude!,
+          ),
+          height: 200.h,
+          width: double.infinity,
+          borderRadius: BorderRadius.circular(12.r),
+        ),
       ),
     );
   }
