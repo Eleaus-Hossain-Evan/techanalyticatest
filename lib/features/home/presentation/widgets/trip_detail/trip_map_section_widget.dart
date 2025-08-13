@@ -26,6 +26,7 @@ class TripMapSectionWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         // child: Image.asset(Images.dummyMap, fit: BoxFit.cover),
         child: ReusableMapWidget(
+          mapId: trip.id,
           pickupLocation: LatLngModel(
             latitude: trip.pickupLatitude!,
             longitude: trip.pickupLongitude!,

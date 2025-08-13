@@ -46,8 +46,8 @@ class MockTripRepository implements TripRepository {
       paymentMethod: 'Card',
       pickupLatitude: 23.8759,
       pickupLongitude: 90.3795,
-      destinationLatitude: 23.7330,
-      destinationLongitude: 90.4172,
+      destinationLatitude: 23.7954406,
+      destinationLongitude: 90.4067826,
     ),
 
     // Completed Trips

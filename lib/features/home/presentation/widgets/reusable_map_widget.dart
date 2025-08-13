@@ -42,11 +42,14 @@ class ReusableMapWidget extends HookConsumerWidget {
 
     // Load route when widget is built or locations change
     useEffect(() {
+      print(
+        '*********************************\nLoading route from ${pickupLocation.toJson()} to ${destinationLocation.toJson()}',
+      );
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        // notifier.loadRoute(
-        //   pickup: pickupLocation,
-        //   destination: destinationLocation,
-        // );
+        notifier.loadRoute(
+          pickup: pickupLocation,
+          destination: destinationLocation,
+        );
       });
       return null;
     }, [pickupLocation, destinationLocation]);
@@ -68,6 +71,21 @@ class ReusableMapWidget extends HookConsumerWidget {
       );
       return null;
     }, [asyncValue]);
+
+    ref.listen(mapAsyncNotifierProvider(mapIdentifier), (previous, next) {
+      if (next.hasError) {
+        onError?.call(next.error.toString());
+      } else if (next.hasValue) {
+        onRouteLoaded?.call();
+        final bounds = _calculateBounds([
+          next.value!.pickupLocation,
+          next.value!.destinationLocation,
+        ]);
+        mapController.value?.animateCamera(
+          CameraUpdate.newLatLngBounds(bounds, 10),
+        );
+      }
+    });
 
     return AbsorbPointer(
       child: Container(
@@ -98,11 +116,6 @@ class ReusableMapWidget extends HookConsumerWidget {
                 ),
                 onMapCreated: (GoogleMapController controller) {
                   mapController.value = controller;
-                  asyncValue.whenData((route) {
-                    if (route != null) {
-                      _fitMapToRoute(controller, route);
-                    }
-                  });
                 },
                 markers: _buildMarkers(asyncValue),
                 polylines: _buildPolylines(asyncValue),
@@ -112,7 +125,7 @@ class ReusableMapWidget extends HookConsumerWidget {
                 mapToolbarEnabled: false,
               ),
               _buildLoadingOverlay(notifier, asyncValue),
-              _buildRouteInfo(asyncValue),
+              // _buildRouteInfo(asyncValue),
             ],
           ),
         ),
